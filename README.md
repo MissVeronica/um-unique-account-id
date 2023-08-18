@@ -34,8 +34,8 @@ Numbers are based on  WP 'user_id' field prefilled with zeros except when 'rando
 4. Meta values for Registration Form ID 4870 and 6 random digits: <code>CompanyName246739</code>
 
 ## Updates
-Version 2.0.0 Added support for meta_key format and random numbers.
-Version 2.1.0 Code improvements
+1. Version 2.0.0 Added support for meta_key format and random numbers.
+2. Version 2.1.0 Code improvements
 
 ## Translations or Text changes
 1. Use the "Say What?" plugin with text domain ultimate-member
