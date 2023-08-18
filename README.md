@@ -35,6 +35,7 @@ Numbers are based on  WP 'user_id' field prefilled with zeros except when 'rando
 
 ## Updates
 Version 2.0.0 Added support for meta_key format and random numbers.
+Version 2.1.0 Code improvements
 
 ## Translations or Text changes
 1. Use the "Say What?" plugin with text domain ultimate-member
