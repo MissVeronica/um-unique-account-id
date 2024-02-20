@@ -2,7 +2,7 @@
 /**
  * Plugin Name:     Ultimate Member - Unique User Account ID
  * Description:     Extension to Ultimate Member for setting a prefixed Unique User Account ID per UM Registration Form.
- * Version:         2.1.0
+ * Version:         2.2.0
  * Requires PHP:    7.4
  * Author:          Miss Veronica
  * License:         GPL v2 or later
@@ -10,7 +10,7 @@
  * Author URI:      https://github.com/MissVeronica
  * Text Domain:     ultimate-member
  * Domain Path:     /languages
- * UM version:      2.6.10
+ * UM version:      2.8.3
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; 
@@ -101,7 +101,7 @@ class UM_Unique_Account_ID {
 
                                     while( $this->unique_account_id_exists( $prefix . $string_pad )) {
                                         $string_pad = str_pad( rand( 0, pow( 10, $digits ) -1 ), $digits, '0', STR_PAD_LEFT );
-                                    }                                    
+                                    }
 
                                 } else {
 
@@ -132,26 +132,29 @@ class UM_Unique_Account_ID {
 
     public function um_settings_structure_unique_account_id( $settings_structure ) {
 
-        $settings_structure['appearance']['sections']['registration_form']['fields'][] = array( 
-                        'id'      => 'um_unique_account_id',
-                        'type'    => 'textarea',
-                        'label'   => __( "Unique User Account ID - Form ID:prefix or meta_key format", 'ultimate-member' ),
-                        'tooltip' => __( "Enter the UM Registration Form ID and the Unique User Account ID Prefix or meta_key format one setting per line.", 'ultimate-member' ),
-                        'args'    => array( 'textarea_rows' => 6 ));
+        $settings_structure['appearance']['sections']['registration_form']['form_sections']['unique_account_id']['title'] = 'Unique User Account ID';
+        $settings_structure['appearance']['sections']['registration_form']['form_sections']['unique_account_id']['description'] = 'Plugin version 2.2.0 - tested with UM 2.8.3';
 
-        $settings_structure['appearance']['sections']['registration_form']['fields'][] = array( 
-                        'id'      => 'um_unique_account_id_digits',
-                        'type'    => 'number',
-                        'label'   => __( "Unique User Account ID - Number of digits", 'ultimate-member' ),
-                        'tooltip' => __( "Enter the number of digits in the Unique User Account ID. Default value is 5.", 'ultimate-member' ),
-                        'size'    => 'small' );
+        $settings_structure['appearance']['sections']['registration_form']['form_sections']['unique_account_id']['fields'][] = array(
+                        'id'          => 'um_unique_account_id',
+                        'type'        => 'textarea',
+                        'label'       => __( "Form ID:prefix or meta_key format", 'ultimate-member' ),
+                        'description' => __( "Enter the UM Registration Form ID and the Unique User Account ID Prefix or meta_key format one setting per line.", 'ultimate-member' ),
+                        'args'        => array( 'textarea_rows' => 6 ));
 
-        $settings_structure['appearance']['sections']['registration_form']['fields'][] = array( 
-                        'id'      => 'um_unique_account_id_meta_key',
-                        'type'    => 'text',
-                        'label'   => __( "Unique User Account ID - meta_key", 'ultimate-member' ),
-                        'tooltip' => __( "Enter the meta_key name of the Unique User Account ID field. Default name is 'um_unique_account_id'", 'ultimate-member' ),
-                        'size'    => 'small' );
+        $settings_structure['appearance']['sections']['registration_form']['form_sections']['unique_account_id']['fields'][] = array(
+                        'id'          => 'um_unique_account_id_digits',
+                        'type'        => 'number',
+                        'label'       => __( "Number of digits", 'ultimate-member' ),
+                        'description' => __( "Enter the number of digits in the Unique User Account ID. Default value is 5.", 'ultimate-member' ),
+                        'size'        => 'small' );
+
+        $settings_structure['appearance']['sections']['registration_form']['form_sections']['unique_account_id']['fields'][] = array(
+                        'id'          => 'um_unique_account_id_meta_key',
+                        'type'        => 'text',
+                        'label'       => __( "meta_key", 'ultimate-member' ),
+                        'description' => __( "Enter the meta_key name of the Unique User Account ID field. Default name is 'um_unique_account_id'", 'ultimate-member' ),
+                        'size'        => 'small' );
 
         return $settings_structure;
     }
