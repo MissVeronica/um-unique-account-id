@@ -132,8 +132,8 @@ class UM_Unique_Account_ID {
 
     public function um_settings_structure_unique_account_id( $settings_structure ) {
 
-        $settings_structure['appearance']['sections']['registration_form']['form_sections']['unique_account_id']['title'] = 'Unique User Account ID';
-        $settings_structure['appearance']['sections']['registration_form']['form_sections']['unique_account_id']['description'] = 'Plugin version 2.2.0 - tested with UM 2.8.3';
+        $settings_structure['appearance']['sections']['registration_form']['form_sections']['unique_account_id']['title']       = __( 'Unique User Account ID', 'ultimate-member' );
+        $settings_structure['appearance']['sections']['registration_form']['form_sections']['unique_account_id']['description'] = __( 'Plugin version 2.2.0 - tested with UM 2.8.3', 'ultimate-member' );
 
         $settings_structure['appearance']['sections']['registration_form']['form_sections']['unique_account_id']['fields'][] = array(
                         'id'          => 'um_unique_account_id',
