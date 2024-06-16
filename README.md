@@ -33,13 +33,16 @@ Numbers are based on  WP 'user_id' field prefilled with zeros except when 'rando
 3. Meta values for Registration Form ID 4860 and 6 random digits: <code>CompanyName-834602</code>
 4. Meta values for Registration Form ID 4870 and 6 random digits: <code>CompanyName246739</code>
 
+## Email placeholder
+1. Use the UM email placeholder {usermeta:here_any_usermeta_key} https://docs.ultimatemember.com/article/1340-placeholders-for-email-templates
+
+## Translations or Text changes
+1. Use the "Say What?" plugin with text domain ultimate-member
+
 ## Updates
 1. Version 2.0.0 Added support for meta_key format and random numbers.
 2. Version 2.1.0 Code improvements
 3. Version 2.2.0 Updated for UM 2.8.3
-
-## Translations or Text changes
-1. Use the "Say What?" plugin with text domain ultimate-member
 
 ## Installation
 1. Download the zip file and install as a WP Plugin, activate the plugin.
