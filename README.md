@@ -40,6 +40,10 @@ Numbers are based on  WP 'user_id' field prefilled with zeros except when 'rando
 ## Translations or Text changes
 1. Use the "Say What?" plugin with text domain ultimate-member
 
+## References
+1. Unique Membership ID - https://github.com/MissVeronica/um-unique-membership-id
+2. Extra Custom Username Field - https://github.com/MissVeronica/um-custom-username-field
+
 ## Updates
 1. Version 2.0.0 Added support for meta_key format and random numbers.
 2. Version 2.1.0 Code improvements
