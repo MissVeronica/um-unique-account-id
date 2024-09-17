@@ -26,7 +26,7 @@ Numbers are based on WP 'user_id' field prefilled with zeros except when 'random
 4880 : meta_key : um-field-name :-: permalink
 </code>
 
-The Registration form user entered value for the meta_key 'um-field-name' will be used as prefix. In these examples user entered 'CompanyName' except for the permalink option 'Company Name'.
+The Registration form user entered value for the meta_key 'um-field-name' will be used as prefix. In these examples user entered 'CompanyName' except for the permalink option where user entered 'Company Name'.
 
 Numbers are based on  WP 'user_id' field prefilled with zeros except when 'random' is specified.
 1. Meta values for Registration Form ID 4840 and 6 digits: <code>CompanyName000456</code>
