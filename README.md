@@ -33,7 +33,7 @@ Numbers are based on  WP 'user_id' field prefilled with zeros except when 'rando
 2. Meta values for Registration Form ID 4850 and 6 digits: <code>CompanyName-000456</code>
 3. Meta values for Registration Form ID 4860 and 6 random digits: <code>CompanyName-834602</code>
 4. Meta values for Registration Form ID 4870 and 6 random digits: <code>CompanyName246739</code>
-5. Meta values for Registration Form ID 4880 and Permalink format with a dash replacing blank and a suffix number from 2 for duplicates <code>Company-Name</code> and <code>Company-Name-2</code>
+5. Meta values for Registration Form ID 4880 and Permalink format with a dash replacing blank and a suffix number from 2 for duplicates <code>company-name</code> and <code>company-name-2</code>
 
 ## Email placeholder
 1. Use the UM email placeholder {usermeta:here_any_usermeta_key} https://docs.ultimatemember.com/article/1340-placeholders-for-email-templates
