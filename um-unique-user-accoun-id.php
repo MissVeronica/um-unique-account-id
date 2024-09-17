@@ -2,15 +2,17 @@
 /**
  * Plugin Name:     Ultimate Member - Unique User Account ID
  * Description:     Extension to Ultimate Member for setting a prefixed Unique User Account ID per UM Registration Form.
- * Version:         2.2.0
+ * Version:         2.3.0
  * Requires PHP:    7.4
  * Author:          Miss Veronica
  * License:         GPL v2 or later
  * License URI:     https://www.gnu.org/licenses/gpl-2.0.html
  * Author URI:      https://github.com/MissVeronica
+ * Plugin URI:      https://github.com/MissVeronica/um-unique-user-account-id
+ * Update URI:      https://github.com/MissVeronica/um-unique-user-account-id
  * Text Domain:     ultimate-member
  * Domain Path:     /languages
- * UM version:      2.8.3
+ * UM version:      2.8.6
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; 
@@ -22,8 +24,12 @@ class UM_Unique_Account_ID {
 
     function __construct() {
 
+        define( 'Plugin_Basename_UUID', plugin_basename(__FILE__));
+
         add_action( 'um_user_register',      array( $this, 'um_user_register_with_unique_account_id' ), -1, 2 );
         add_filter( 'um_settings_structure', array( $this, 'um_settings_structure_unique_account_id' ), 10, 1 );
+
+        add_filter( 'plugin_action_links_' . Plugin_Basename_UUID, array( $this, 'plugin_settings_link' ), 10 );
     }
 
     public function unique_account_id_exists( $value ) {
@@ -60,25 +66,54 @@ class UM_Unique_Account_ID {
 
                             $prefix = '';
                             $string_pad = '';
+                            $um_unique_account_id = '';
 
                             if ( $array[1] == 'meta_key' && isset( $array[2] ) && ! empty( $array[2] )) {
 
                                 if ( isset( $args[$array[2]] ) && ! empty( $args[$array[2]] )) {
 
                                     $prefix = sanitize_text_field( $args[$array[2]] );
-                                    if ( isset( $array[3] ) && ! empty( $array[3] ) && mb_strlen( $array[3] ) == 1 ) {
-                                        $prefix .= $array[3];
-                                    }
 
-                                    if ( isset( $array[4] ) && $array[4] == 'random' ) {
+                                    if ( isset( $array[4] ) && ! empty( $array[4] )) {
 
-                                        $string_pad = str_pad( rand( 0, pow( 10, $digits ) -1 ), $digits, '0', STR_PAD_LEFT );
+                                        if ( $array[4] == 'random' ) {
 
-                                        while( $this->unique_account_id_exists( $prefix . $string_pad )) {
+                                            if ( isset( $array[3] ) && ! empty( $array[3] ) && strlen( $array[3] ) == 1 ) {
+                                                $prefix .= $array[3];
+                                            }
+
                                             $string_pad = str_pad( rand( 0, pow( 10, $digits ) -1 ), $digits, '0', STR_PAD_LEFT );
-                                        }                                    
+
+                                            while( $this->unique_account_id_exists( $prefix . $string_pad )) {
+                                                $string_pad = str_pad( rand( 0, pow( 10, $digits ) -1 ), $digits, '0', STR_PAD_LEFT );
+                                            }
+
+                                            $um_unique_account_id = $prefix . $string_pad;
+                                        }
+
+                                        if ( $array[4] == 'permalink' ) {
+
+                                            $dash = '-';
+                                            if ( isset( $array[3] ) && ! empty( $array[3] ) && strlen( $array[3] ) == 1 ) {
+                                                $dash = $array[3];
+                                            }
+
+                                            $prefix = str_replace( ' ', $dash, $prefix );
+                                            $prefix = strtolower( $prefix );
+
+                                            $i = 2;
+                                            while( $this->unique_account_id_exists( $prefix . $string_pad )) {
+                                                $string_pad = $dash . $i++;
+                                            }
+
+                                            $um_unique_account_id = $prefix . $string_pad;
+                                        }
 
                                     } else {
+
+                                        if ( isset( $array[3] ) && ! empty( $array[3] ) && strlen( $array[3] ) == 1 ) {
+                                            $prefix .= $array[3];
+                                        }
 
                                         $string_pad = str_pad( strval( $user_id ), $digits, '0', STR_PAD_LEFT );
 
@@ -88,6 +123,8 @@ class UM_Unique_Account_ID {
                                         while( $this->unique_account_id_exists( $prefix . $string_pad )) {
                                             $string_pad = $string_pad_saved . '-' . str_pad( strval( $i++ ), 3, '0', STR_PAD_LEFT );
                                         }
+
+                                        $um_unique_account_id = $prefix . $string_pad;
                                     }
                                 }
 
@@ -115,11 +152,11 @@ class UM_Unique_Account_ID {
                                     }
                                 }
 
+                                $um_unique_account_id = $prefix . $string_pad;
                             }
 
-                            if ( ! empty( $prefix ) && ! empty( $string_pad )) {
+                            if ( ! empty( $um_unique_account_id )) {
 
-                                $um_unique_account_id = $prefix . $string_pad;
                                 update_user_meta( $user_id, $this->um_unique_account_meta_key, $um_unique_account_id );
                                 break;
                             }
@@ -130,35 +167,74 @@ class UM_Unique_Account_ID {
         }
     }
 
+    public function plugin_settings_link( $links ) {
+
+        $url = get_admin_url() . 'admin.php?page=um_options&tab=appearance&section=registration_form';
+        $links[] = '<a href="' . esc_url( $url ) . '">' . __( 'Settings' ) . '</a>';
+
+        return $links;
+    }
+
     public function um_settings_structure_unique_account_id( $settings_structure ) {
 
-        $settings_structure['appearance']['sections']['registration_form']['form_sections']['unique_account_id']['title']       = __( 'Unique User Account ID', 'ultimate-member' );
-        $settings_structure['appearance']['sections']['registration_form']['form_sections']['unique_account_id']['description'] = __( 'Plugin version 2.2.0 - tested with UM 2.8.3', 'ultimate-member' );
+        if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == 'um_options' ) {
+            if ( isset( $_REQUEST['tab'] ) && $_REQUEST['tab'] == 'appearance' ) {
+                if ( isset( $_REQUEST['section'] ) && $_REQUEST['section'] == 'registration_form' ) {
 
-        $settings_structure['appearance']['sections']['registration_form']['form_sections']['unique_account_id']['fields'][] = array(
-                        'id'          => 'um_unique_account_id',
-                        'type'        => 'textarea',
-                        'label'       => __( "Form ID:prefix or meta_key format", 'ultimate-member' ),
-                        'description' => __( "Enter the UM Registration Form ID and the Unique User Account ID Prefix or meta_key format one setting per line.", 'ultimate-member' ),
-                        'args'        => array( 'textarea_rows' => 6 ));
+                    if ( ! isset( $settings_structure['appearance']['sections']['']['form_sections']['unique_account_id']['fields'] )) {
 
-        $settings_structure['appearance']['sections']['registration_form']['form_sections']['unique_account_id']['fields'][] = array(
-                        'id'          => 'um_unique_account_id_digits',
-                        'type'        => 'number',
-                        'label'       => __( "Number of digits", 'ultimate-member' ),
-                        'description' => __( "Enter the number of digits in the Unique User Account ID. Default value is 5.", 'ultimate-member' ),
-                        'size'        => 'small' );
+                        $plugin_data = get_plugin_data( __FILE__ );
 
-        $settings_structure['appearance']['sections']['registration_form']['form_sections']['unique_account_id']['fields'][] = array(
-                        'id'          => 'um_unique_account_id_meta_key',
-                        'type'        => 'text',
-                        'label'       => __( "meta_key", 'ultimate-member' ),
-                        'description' => __( "Enter the meta_key name of the Unique User Account ID field. Default name is 'um_unique_account_id'", 'ultimate-member' ),
-                        'size'        => 'small' );
+                        $link = sprintf( '<a href="%s" target="_blank" title="%s">%s</a>',
+                                                    esc_url( $plugin_data['PluginURI'] ),
+                                                    __( 'GitHub plugin documentation and download', 'ultimate-member' ),
+                                                    __( 'Plugin', 'ultimate-member' )
+                                        );
+
+                        $header = array(
+                                            'title'       => __( 'Unique User Account ID', 'ultimate-member' ),
+                                            'description' => sprintf( __( '%s version %s - tested with UM 2.8.6', 'ultimate-member' ),
+                                                                        $link, esc_attr( $plugin_data['Version'] )),
+                                                        );
+
+                        $prefix = '&nbsp; * &nbsp;';
+                        $section_fields = array();
+
+                        $section_fields[] = array(
+                                        'id'          => 'um_unique_account_id',
+                                        'type'        => 'textarea',
+                                        'label'       => $prefix . __( "Form ID:prefix or meta_key format", 'ultimate-member' ),
+                                        'description' => __( "Enter the UM Registration Form ID and the Unique User Account ID Prefix or meta_key format one setting per line.", 'ultimate-member' ),
+                                        'args'        => array( 'textarea_rows' => 6 ));
+
+                        $section_fields[] = array(
+                                        'id'          => 'um_unique_account_id_digits',
+                                        'type'        => 'number',
+                                        'label'       => $prefix . __( "Number of digits", 'ultimate-member' ),
+                                        'description' => __( "Enter the number of digits in the Unique User Account ID. Default value is 5.", 'ultimate-member' ),
+                                        'size'        => 'small' );
+
+                        $section_fields[] = array(
+                                        'id'          => 'um_unique_account_id_meta_key',
+                                        'type'        => 'text',
+                                        'label'       => $prefix . __( "Unique User Account ID meta_key", 'ultimate-member' ),
+                                        'description' => __( "Enter the meta_key name of the Unique User Account ID field. Default name is 'um_unique_account_id'", 'ultimate-member' ),
+                                        'size'        => 'small' );
+
+                        $settings_structure['appearance']['sections']['registration_form']['form_sections']['unique_account_id'] = $header;
+                        $settings_structure['appearance']['sections']['registration_form']['form_sections']['unique_account_id']['fields'] = $section_fields;
+
+                    }
+                }
+            }
+        }
 
         return $settings_structure;
     }
+
+
 }
 
 new UM_Unique_Account_ID ();
+
 
