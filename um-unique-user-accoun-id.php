@@ -2,7 +2,7 @@
 /**
  * Plugin Name:     Ultimate Member - Unique User Account ID
  * Description:     Extension to Ultimate Member for setting a prefixed Unique User Account ID per UM Registration Form.
- * Version:         2.3.0
+ * Version:         2.3.1
  * Requires PHP:    7.4
  * Author:          Miss Veronica
  * License:         GPL v2 or later
@@ -12,7 +12,7 @@
  * Update URI:      https://github.com/MissVeronica/um-unique-user-account-id
  * Text Domain:     ultimate-member
  * Domain Path:     /languages
- * UM version:      2.8.6
+ * UM version:      2.8.8
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; 
@@ -99,6 +99,7 @@ class UM_Unique_Account_ID {
                                             }
 
                                             $prefix = str_replace( ' ', $dash, $prefix );
+                                            $prefix = preg_replace( "/[^A-Za-z0-9\{$dash}]/", '', $prefix );
                                             $prefix = strtolower( $prefix );
 
                                             $i = 2;
@@ -170,7 +171,7 @@ class UM_Unique_Account_ID {
     public function plugin_settings_link( $links ) {
 
         $url = get_admin_url() . 'admin.php?page=um_options&tab=appearance&section=registration_form';
-        $links[] = '<a href="' . esc_url( $url ) . '">' . __( 'Settings' ) . '</a>';
+        $links[] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Settings' ) . '</a>';
 
         return $links;
     }
@@ -187,13 +188,13 @@ class UM_Unique_Account_ID {
 
                         $link = sprintf( '<a href="%s" target="_blank" title="%s">%s</a>',
                                                     esc_url( $plugin_data['PluginURI'] ),
-                                                    __( 'GitHub plugin documentation and download', 'ultimate-member' ),
-                                                    __( 'Plugin', 'ultimate-member' )
+                                                    esc_html__( 'GitHub plugin documentation and download', 'ultimate-member' ),
+                                                    esc_html__( 'Plugin', 'ultimate-member' )
                                         );
 
                         $header = array(
                                             'title'       => __( 'Unique User Account ID', 'ultimate-member' ),
-                                            'description' => sprintf( __( '%s version %s - tested with UM 2.8.6', 'ultimate-member' ),
+                                            'description' => sprintf( esc_html__( '%s version %s - tested with UM 2.8.8', 'ultimate-member' ),
                                                                         $link, esc_attr( $plugin_data['Version'] )),
                                                         );
 
@@ -203,22 +204,22 @@ class UM_Unique_Account_ID {
                         $section_fields[] = array(
                                         'id'          => 'um_unique_account_id',
                                         'type'        => 'textarea',
-                                        'label'       => $prefix . __( "Form ID:prefix or meta_key format", 'ultimate-member' ),
-                                        'description' => __( "Enter the UM Registration Form ID and the Unique User Account ID Prefix or meta_key format one setting per line.", 'ultimate-member' ),
+                                        'label'       => $prefix . esc_html__( "Form ID:prefix or meta_key format", 'ultimate-member' ),
+                                        'description' => esc_html__( "Enter the UM Registration Form ID and the Unique User Account ID Prefix or meta_key format one setting per line.", 'ultimate-member' ),
                                         'args'        => array( 'textarea_rows' => 6 ));
 
                         $section_fields[] = array(
                                         'id'          => 'um_unique_account_id_digits',
                                         'type'        => 'number',
-                                        'label'       => $prefix . __( "Number of digits", 'ultimate-member' ),
-                                        'description' => __( "Enter the number of digits in the Unique User Account ID. Default value is 5.", 'ultimate-member' ),
+                                        'label'       => $prefix . esc_html__( "Number of digits", 'ultimate-member' ),
+                                        'description' => esc_html__( "Enter the number of digits in the Unique User Account ID. Default value is 5.", 'ultimate-member' ),
                                         'size'        => 'small' );
 
                         $section_fields[] = array(
                                         'id'          => 'um_unique_account_id_meta_key',
                                         'type'        => 'text',
-                                        'label'       => $prefix . __( "Unique User Account ID meta_key", 'ultimate-member' ),
-                                        'description' => __( "Enter the meta_key name of the Unique User Account ID field. Default name is 'um_unique_account_id'", 'ultimate-member' ),
+                                        'label'       => $prefix . esc_html__( "Unique User Account ID meta_key", 'ultimate-member' ),
+                                        'description' => esc_html__( "Enter the meta_key name of the Unique User Account ID field. Default name is 'um_unique_account_id'", 'ultimate-member' ),
                                         'size'        => 'small' );
 
                         $settings_structure['appearance']['sections']['registration_form']['form_sections']['unique_account_id'] = $header;
@@ -236,5 +237,4 @@ class UM_Unique_Account_ID {
 }
 
 new UM_Unique_Account_ID ();
-
 
