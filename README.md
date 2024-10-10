@@ -52,5 +52,7 @@ Numbers are based on  WP 'user_id' field prefilled with zeros except when 'rando
 4. Version 2.3.0 Addition of the Permalink option. Code improvements.
 5. Version 2.3.1 Removal of non alpha/numeric characters in permalink mode.
 
-## Installation
-1. Download the zip file and install as a WP Plugin, activate the plugin.
+## Installation & Updates
+1. Install and update by downloading the plugin ZIP file via the green "Code" button
+2. Install as a new Plugin, which you upload in WordPress -> Plugins -> Add New -> Upload Plugin.
+3. Activate the Plugin: Ultimate Member - Unique User Account ID
