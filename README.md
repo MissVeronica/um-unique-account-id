@@ -50,6 +50,7 @@ Numbers are based on  WP 'user_id' field prefilled with zeros except when 'rando
 2. Version 2.1.0 Code improvements
 3. Version 2.2.0 Updated for UM 2.8.3
 4. Version 2.3.0 Addition of the Permalink option. Code improvements.
+5. Version 2.3.1 Removal of non alpha and digit characters in permalink mode.
 
 ## Installation
 1. Download the zip file and install as a WP Plugin, activate the plugin.
