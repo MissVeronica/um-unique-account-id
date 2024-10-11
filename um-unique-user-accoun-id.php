@@ -2,7 +2,7 @@
 /**
  * Plugin Name:     Ultimate Member - Unique User Account ID
  * Description:     Extension to Ultimate Member for setting a prefixed Unique User Account ID per UM Registration Form.
- * Version:         2.3.1
+ * Version:         2.3.2
  * Requires PHP:    7.4
  * Author:          Miss Veronica
  * License:         GPL v2 or later
@@ -98,9 +98,10 @@ class UM_Unique_Account_ID {
                                                 $dash = $array[3];
                                             }
 
-                                            $prefix = str_replace( ' ', $dash, $prefix );
-                                            $prefix = preg_replace( "/[^A-Za-z0-9\{$dash}]/", '', $prefix );
-                                            $prefix = strtolower( $prefix );
+                                            $prefix  = str_replace( ' ', $dash, $prefix );
+                                            $replace = str_replace( 'dash', $dash, "/[^A-Za-z0-9\dash]/" );
+                                            $prefix  = preg_replace( $replace, '', $prefix );
+                                            $prefix  = strtolower( $prefix );
 
                                             $i = 2;
                                             while( $this->unique_account_id_exists( $prefix . $string_pad )) {
