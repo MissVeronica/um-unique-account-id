@@ -38,6 +38,11 @@ Numbers are based on  WP 'user_id' field prefilled with zeros except when 'rando
 ## Email placeholder
 1. Use the UM email placeholder {usermeta:here_any_usermeta_key} https://docs.ultimatemember.com/article/1340-placeholders-for-email-templates
 
+## Pernalink
+1. UM Settings -> General -> Users
+2. Profile Permalink Base -> Custom usermeta
+3. Profile Permalink Base Custom Meta Key = 'um_unique_account_id'
+
 ## Translations or Text changes
 1. Use the "Say What?" plugin with text domain ultimate-member
 
