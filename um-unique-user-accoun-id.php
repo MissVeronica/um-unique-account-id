@@ -2,7 +2,7 @@
 /**
  * Plugin Name:     Ultimate Member - Unique User Account ID
  * Description:     Extension to Ultimate Member for setting a prefixed Unique User Account ID per UM Registration Form.
- * Version:         2.3.2
+ * Version:         2.4.0
  * Requires PHP:    7.4
  * Author:          Miss Veronica
  * License:         GPL v2 or later
@@ -12,10 +12,10 @@
  * Update URI:      https://github.com/MissVeronica/um-unique-user-account-id
  * Text Domain:     ultimate-member
  * Domain Path:     /languages
- * UM version:      2.8.8
+ * UM version:      2.9.1
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit; 
+if ( ! defined( 'ABSPATH' ) ) exit;
 if ( ! class_exists( 'UM' ) ) return;
 
 class UM_Unique_Account_ID {
@@ -26,8 +26,8 @@ class UM_Unique_Account_ID {
 
         define( 'Plugin_Basename_UUID', plugin_basename(__FILE__));
 
-        add_action( 'um_user_register',      array( $this, 'um_user_register_with_unique_account_id' ), -1, 2 );
-        add_filter( 'um_settings_structure', array( $this, 'um_settings_structure_unique_account_id' ), 10, 1 );
+        add_action( 'um_user_register',         array( $this, 'um_user_register_with_unique_account_id' ), -1, 2 );
+        add_filter( 'um_settings_structure',    array( $this, 'um_settings_structure_unique_account_id' ), 10, 1 );
 
         add_filter( 'plugin_action_links_' . Plugin_Basename_UUID, array( $this, 'plugin_settings_link' ), 10 );
     }
@@ -134,6 +134,11 @@ class UM_Unique_Account_ID {
 
                                 $prefix = $array[1];
 
+                                if ( $array[1] == 'custom_keys' ) {
+
+                                    $prefix = $this->custom_keys_unique_account_id( $args, $array );
+                                }
+
                                 if ( isset( $array[2] ) && $array[2] == 'random' ) {
 
                                     $string_pad = str_pad( rand( 0, pow( 10, $digits ) -1 ), $digits, '0', STR_PAD_LEFT );
@@ -169,6 +174,33 @@ class UM_Unique_Account_ID {
         }
     }
 
+    public function custom_keys_unique_account_id( $args, $array ) {
+
+        $delimiter = $array[2];
+
+        $meta_keys = $array;
+        unset( $meta_keys[0], $meta_keys[1], $meta_keys[2] );
+
+        $meta_values = array();
+
+        foreach( $meta_keys as $meta_key ) {
+
+            if ( isset( $args[$meta_key] )) {
+
+                if ( ! is_array( $args[$meta_key] )) {
+                    $meta_values[] = sanitize_text_field( $args[$meta_key] );
+
+                } else {
+                    $meta_values[] = sanitize_text_field( implode( '+', $args[$meta_key] ));
+                }
+            }
+        }
+
+        $prefix = implode( $delimiter, $meta_values ) . $delimiter;
+
+        return $prefix;
+    }
+
     public function plugin_settings_link( $links ) {
 
         $url = get_admin_url() . 'admin.php?page=um_options&tab=appearance&section=registration_form';
@@ -195,7 +227,7 @@ class UM_Unique_Account_ID {
 
                         $header = array(
                                             'title'       => __( 'Unique User Account ID', 'ultimate-member' ),
-                                            'description' => sprintf( esc_html__( '%s version %s - tested with UM 2.8.8', 'ultimate-member' ),
+                                            'description' => sprintf( esc_html__( '%s version %s - tested with UM 2.9.1', 'ultimate-member' ),
                                                                         $link, esc_attr( $plugin_data['Version'] )),
                                                         );
 
@@ -205,15 +237,15 @@ class UM_Unique_Account_ID {
                         $section_fields[] = array(
                                         'id'          => 'um_unique_account_id',
                                         'type'        => 'textarea',
-                                        'label'       => $prefix . esc_html__( "Form ID:prefix or meta_key format", 'ultimate-member' ),
-                                        'description' => esc_html__( "Enter the UM Registration Form ID and the Unique User Account ID Prefix or meta_key format one setting per line.", 'ultimate-member' ),
+                                        'label'       => $prefix . esc_html__( "Form ID:prefix or meta_key or custom_keys formats", 'ultimate-member' ),
+                                        'description' => esc_html__( "Enter the UM Registration Form ID and the Unique User Account ID Prefix or meta_key or custom_keys formats one setting per line.", 'ultimate-member' ),
                                         'args'        => array( 'textarea_rows' => 6 ));
 
                         $section_fields[] = array(
                                         'id'          => 'um_unique_account_id_digits',
                                         'type'        => 'number',
-                                        'label'       => $prefix . esc_html__( "Number of digits", 'ultimate-member' ),
-                                        'description' => esc_html__( "Enter the number of digits in the Unique User Account ID. Default value is 5.", 'ultimate-member' ),
+                                        'label'       => $prefix . esc_html__( "Number of digits in user ID", 'ultimate-member' ),
+                                        'description' => esc_html__( "Enter the number of digits for the user ID. Default value is 5. Set to 1 for no prefilled zeros.", 'ultimate-member' ),
                                         'size'        => 'small' );
 
                         $section_fields[] = array(
@@ -238,4 +270,5 @@ class UM_Unique_Account_ID {
 }
 
 new UM_Unique_Account_ID ();
+
 
