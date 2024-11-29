@@ -50,6 +50,13 @@ Number of digits are based on WP 'user_id' field prefilled with zeros up to the 
 2. Profile Permalink Base -> Custom usermeta
 3. Profile Permalink Base Custom Meta Key = 'um_unique_account_id'
 
+## UM Predefined fields
+1. Title and Label: Unique Account ID
+2. Unique meta_key value
+3. Not editable by User only by Admins
+4. Field should only be used on Profile pages
+5. Displayed nion-editable at General tab Account page after Username
+
 ## Translations or Text changes
 1. Use the "Say What?" plugin with text domain ultimate-member
 
