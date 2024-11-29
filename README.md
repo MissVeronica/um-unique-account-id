@@ -1,4 +1,4 @@
-# UM Unique User Account ID
+# UM Unique User Account ID - version 2.5.0
 Extension to Ultimate Member for setting a prefixed Unique User Account ID per UM Registration Form.
 
 ## UM Settings -> Appearance -> Registration Form
@@ -56,6 +56,7 @@ Number of digits are based on WP 'user_id' field prefilled with zeros up to the 
 ## References
 1. Unique Membership ID - https://github.com/MissVeronica/um-unique-membership-id
 2. Extra Custom Username Field - https://github.com/MissVeronica/um-custom-username-field
+3. Additional User Columns - https://github.com/MissVeronica/um-additional-user-columns
 
 ## Updates
 1. Version 2.0.0 Added support for meta_key format and random numbers.
@@ -64,6 +65,7 @@ Number of digits are based on WP 'user_id' field prefilled with zeros up to the 
 4. Version 2.3.0 Addition of the Permalink option. Code improvements.
 5. Version 2.3.1/2.3.2 Removal of non alpha/numeric characters in permalink mode.
 6. Version 2.4.0 Addition of the "custom_keys" format option
+7. Version 2.5.0 UM Predefined field for Unique User Account ID editable only by Admin in Profile, User display in General tab Account page
 
 ## Installation & Updates
 1. Install and update by downloading the plugin ZIP file via the green "Code" button
