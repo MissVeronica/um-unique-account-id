@@ -2,7 +2,7 @@
 /**
  * Plugin Name:     Ultimate Member - Unique User Account ID
  * Description:     Extension to Ultimate Member for setting a prefixed Unique User Account ID per UM Registration Form.
- * Version:         2.4.0
+ * Version:         2.5.0
  * Requires PHP:    7.4
  * Author:          Miss Veronica
  * License:         GPL v2 or later
@@ -26,10 +26,20 @@ class UM_Unique_Account_ID {
 
         define( 'Plugin_Basename_UUID', plugin_basename(__FILE__));
 
-        add_action( 'um_user_register',         array( $this, 'um_user_register_with_unique_account_id' ), -1, 2 );
-        add_filter( 'um_settings_structure',    array( $this, 'um_settings_structure_unique_account_id' ), 10, 1 );
+        add_action( 'um_user_register',              array( $this, 'um_user_register_with_unique_account_id' ), -1, 2 );
+        add_filter( 'um_settings_structure',         array( $this, 'um_settings_structure_unique_account_id' ), 10, 1 );
+        add_filter( 'um_predefined_fields_hook',     array( $this, 'custom_predefined_fields_unique_account_id' ), 10, 1 );
+
+        add_filter( 'um_account_tab_general_fields', array( $this, 'um_account_tab_general_fields' ), 10, 2 );
+        add_filter( 'um_is_field_disabled',          array( $this, 'um_account_tab_general_fields_disable' ), 10, 2 );
 
         add_filter( 'plugin_action_links_' . Plugin_Basename_UUID, array( $this, 'plugin_settings_link' ), 10 );
+
+        $this->um_unique_account_meta_key = sanitize_key( UM()->options()->get( 'um_unique_account_id_meta_key' ));
+
+        if ( empty( $this->um_unique_account_meta_key )) {
+            $this->um_unique_account_meta_key = 'um_unique_account_id';
+        }
     }
 
     public function unique_account_id_exists( $value ) {
@@ -57,11 +67,6 @@ class UM_Unique_Account_ID {
                             $digits = absint( UM()->options()->get( 'um_unique_account_id_digits' ));
                             if ( empty( $digits )) {
                                 $digits = 5;
-                            }
-
-                            $this->um_unique_account_meta_key = sanitize_key( UM()->options()->get( 'um_unique_account_id_meta_key' ));
-                            if ( empty( $this->um_unique_account_meta_key )) {
-                                $this->um_unique_account_meta_key = 'um_unique_account_id';
                             }
 
                             $prefix = '';
@@ -196,7 +201,7 @@ class UM_Unique_Account_ID {
             }
         }
 
-        $prefix = implode( $delimiter, $meta_values ) . $delimiter;
+        $prefix = str_replace( ' ', '_', implode( $delimiter, $meta_values )) . $delimiter;
 
         return $prefix;
     }
@@ -264,6 +269,44 @@ class UM_Unique_Account_ID {
         }
 
         return $settings_structure;
+    }
+
+    public function custom_predefined_fields_unique_account_id( $predefined_fields ) {
+
+        $predefined_fields[$this->um_unique_account_meta_key] = array(
+                                                                        'title'    => __( 'Unique Account ID', 'ultimate-member' ),
+                                                                        'metakey'  => $this->um_unique_account_meta_key,
+                                                                        'type'     => 'text',
+                                                                        'label'    => __( 'Unique Account ID', 'ultimate-member' ),
+                                                                        'required' => 0,
+                                                                        'public'   => 1,
+                                                                        'editable' => false,
+                                                                        'validate' => 'unique_value',
+                                                                    );
+
+        return $predefined_fields;
+    }
+
+    public function um_account_tab_general_fields( $args, $shortcode_args ) {
+
+
+        if ( ! strpos( $args, ',' . $this->um_unique_account_meta_key )) {
+            $args = str_replace( 'user_login,', 'user_login,' . $this->um_unique_account_meta_key . ',', $args );
+        }
+
+        return $args;
+    }
+
+    public function um_account_tab_general_fields_disable( $disabled, $data ) {
+
+        if ( isset( $data['metakey'] ) && $data['metakey'] == $this->um_unique_account_meta_key ) {
+
+            if ( ! current_user_can( 'administrator' )) {
+                $disabled = ' disabled="disabled" ';
+            }
+        }
+
+        return $disabled;
     }
 
 
