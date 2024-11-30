@@ -1,10 +1,10 @@
 # UM Unique User Account ID - version 2.5.0
 Extension to Ultimate Member for setting a prefixed Unique User Account ID per UM Registration Form.
 
-## UM Settings -> Appearance -> Registration Form
-1. Unique User Account ID - Form ID:prefix or meta_key or custom_keys format - Enter the UM Registration Form ID and the Unique User Account ID Prefix or meta_key format one setting per line.
-2. Unique User Account ID - Number of digits - Enter the number of digits for the user ID. Default value is 5. Set to 1 for no prefilled zeros.
-3. Unique User Account ID - Unique User Account ID meta_key - Enter the meta_key name of the Unique User Account ID field. Default name is 'um_unique_account_id'
+## UM Settings -> Appearance -> Registration Form -> "Unique User Account ID"
+1. Form ID:prefix or meta_key or custom_keys format - Enter the UM Registration Form ID and the Unique User Account ID Prefix or meta_key format one setting per line.
+2. Number of digits - Enter the number of digits for the user ID. Default value is 5. Set to 1 for no prefilled zeros.
+3. Unique User Account ID meta_key - Enter the meta_key name of the Unique User Account ID field. Default name is 'um_unique_account_id'
 4. Don't add a field to the Registration Form with this meta_key.
 
 ### Prefix format
