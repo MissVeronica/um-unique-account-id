@@ -1,11 +1,12 @@
-# UM Unique User Account ID - version 2.5.0
+# UM Unique User Account ID - version 2.6.0
 Extension to Ultimate Member for setting a prefixed Unique User Account ID per UM Registration Form.
 
 ## UM Settings -> Appearance -> Registration Form -> "Unique User Account ID"
 1. Form ID:prefix or meta_key or custom_keys format - Enter the UM Registration Form ID and the Unique User Account ID Prefix or meta_key format one setting per line.
 2. Number of digits - Enter the number of digits for the user ID. Default value is 5. Set to 1 for no prefilled zeros.
 3. Unique User Account ID meta_key - Enter the meta_key name of the Unique User Account ID field. Default name is 'um_unique_account_id'
-4. Don't add a field to the Registration Form with this meta_key.
+4. All Users column - Tick to create an All Users column with the Unique User Account ID
+5. Don't add a field to the Registration Form with this meta_key.
 
 ### Prefix format
 <code>4840 : ABCD
@@ -73,6 +74,7 @@ Number of digits are based on WP 'user_id' field prefilled with zeros up to the 
 5. Version 2.3.1/2.3.2 Removal of non alpha/numeric characters in permalink mode.
 6. Version 2.4.0 Addition of the "custom_keys" format option
 7. Version 2.5.0 UM Predefined field for Unique User Account ID editable only by Admin in Profile, User display in General tab Account page
+8. Version 2.6.0 Addition of a selectable WP All Users sortable column with "Unique Account ID"
 
 ## Installation & Updates
 1. Install and update by downloading the plugin ZIP file via the green "Code" button
