@@ -2,7 +2,7 @@
 /**
  * Plugin Name:     Ultimate Member - Unique User Account ID
  * Description:     Extension to Ultimate Member for setting a prefixed Unique User Account ID per UM Registration Form.
- * Version:         2.5.0
+ * Version:         2.6.0
  * Requires PHP:    7.4
  * Author:          Miss Veronica
  * License:         GPL v2 or later
@@ -32,6 +32,13 @@ class UM_Unique_Account_ID {
 
         add_filter( 'um_account_tab_general_fields', array( $this, 'um_account_tab_general_fields' ), 10, 2 );
         add_filter( 'um_is_field_disabled',          array( $this, 'um_account_tab_general_fields_disable' ), 10, 2 );
+
+        if ( UM()->options()->get( 'um_unique_account_id_column' ) == 1 ) {
+
+            add_filter( 'manage_users_sortable_columns', array( $this, 'register_sortable_columns_custom' ), 1, 1 );
+            add_filter( 'manage_users_columns',          array( $this, 'manage_users_columns_custom_um' ), 10, 1 );
+            add_filter( 'manage_users_custom_column',    array( $this, 'manage_users_custom_column_um' ), 10, 3 );
+        }
 
         add_filter( 'plugin_action_links_' . Plugin_Basename_UUID, array( $this, 'plugin_settings_link' ), 10 );
 
@@ -260,6 +267,13 @@ class UM_Unique_Account_ID {
                                         'description' => esc_html__( "Enter the meta_key name of the Unique User Account ID field. Default name is 'um_unique_account_id'", 'ultimate-member' ),
                                         'size'        => 'small' );
 
+                        $section_fields[] = array(
+                                        'id'             => 'um_unique_account_id_column',
+                                        'type'           => 'checkbox',
+                                        'label'          => $prefix . esc_html__( 'All Users column', 'ultimate-member' ),
+                                        'checkbox_label' => esc_html__( "Tick to create an All Users column with the Unique User Account ID", 'ultimate-member' ),
+                                    );
+
                         $settings_structure['appearance']['sections']['registration_form']['form_sections']['unique_account_id'] = $header;
                         $settings_structure['appearance']['sections']['registration_form']['form_sections']['unique_account_id']['fields'] = $section_fields;
 
@@ -309,6 +323,31 @@ class UM_Unique_Account_ID {
         return $disabled;
     }
 
+    public function register_sortable_columns_custom( $columns ) {
+
+        $columns[$this->um_unique_account_meta_key] = $this->um_unique_account_meta_key;
+
+        return $columns;
+    }
+
+    public function manage_users_columns_custom_um( $columns ) {
+
+        $columns[$this->um_unique_account_meta_key] = esc_html__( 'Unique User Account ID', 'ultimate-member' );
+
+        return $columns;
+    }
+
+    public function manage_users_custom_column_um( $value, $column_name, $user_id ) {
+
+        if ( $column_name == $this->um_unique_account_meta_key ) {
+
+            um_fetch_user( $user_id );
+            $value = um_user( $this->um_unique_account_meta_key );
+            um_reset_user();
+        }
+
+        return $value;
+    }
 
 }
 
